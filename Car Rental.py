@@ -1,4 +1,5 @@
 import csv
+from secrets import choice
 import time
 import getpass
 filename=open('Car data.csv','r')
@@ -11,13 +12,13 @@ transmission=[],
 fuel=[],
 price_per_day=[]
 path= ('r','C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\Car data.csv')
-print(path)
 
 brand=list(brand)
 model=list(model)
 transmission=list(transmission)
 fuel=list(fuel)
 price_per_day=list(price_per_day)
+choice
 
 with open('Car data.csv', 'rb') as csvfile:
     for col in file:
@@ -47,15 +48,36 @@ class menu:
         return user_type
 
 class customer(menu):
-    def __init__(self,user_type,choice):
+    def __init__(self,user_type):
         super().__init__(user_type)
-        self.choice=choice
+        global choice
         print("\nDisplaying Car Inventory:\n")
         print("Car Brand\tModel Name\tTransmission\tFuel\Rate per day or 300km")
         l=len(model)
         for i in range(1,l+1):
             print(i,"\t",model[i],"\t",brand[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
         choice=int(input("Enter your choice number"))
+    
+class bill(menu):
+    days=int(input("Enter the number of days you want to rent the car for:  (Valid range is between 1 to 60)\n"))
+    if days>=1 and days<=5:
+        rate=price_per_day[choice]
+        cost=rate*days
+    elif days>=6 and days<=10:
+        rate=0.85*price_per_day[choice]
+        cost=rate*days
+    elif days>=11 and days <=15:
+        rate=0.7*price_per_day[choice]
+        cost=rate*days
+    elif days>=16 and days<=60:
+        rate=0.5*price_per_day[choice]
+        cost=rate*days
+    else:
+        print("Invalid Input")
+        SystemExit
+    print("Confirm Selection:")
+    print("You have chosen ",brand[choice],model[choice],", with ",transmission[choice]," transmission choice and ",fuel[choice]," fuel, at the rate of Rs. ",price_per_day[choice]," per day")
+    print("Thus Resulting in Total Bill of Rs. %0.2f" %rate)
 
 class operator(menu):
     def __init__(self,user_type):
@@ -68,5 +90,4 @@ class operator(menu):
         else:
             print("Wrong Credentials!")
             SystemExit
-
 

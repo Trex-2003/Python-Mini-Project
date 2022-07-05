@@ -96,11 +96,16 @@ class employee(menu): #derived from menu class
             print(" 1. Add Vehicle\t2. Delete Vehicle\t3. Update Rates")
             n=int(input())
             if n==1:
+                brand1=input("Enter the brand")
+                model1=input("Enter the model")
+                transmission1=input("Enter the kind of transmission")
+                fuel1=input("Enter the type of fuel")
+                price_per_day1=input("Enter the price per day")
                 brand.append(col["Brand"]) 
                 model.append(col["Model"])  
                 transmission.append(col["Transmission"])
                 fuel.append(col["Fuel"])
-                price_per_day.append(col["Cost"])
+                price_per_day.append(col["Price"])
             elif n==2:
                 pass
             elif n=3:

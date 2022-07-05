@@ -128,7 +128,8 @@ class employee(menu): #derived from menu class
                 del fuel[n]
                 del price_per_day[n]
                 print("Displaying the updated inventory:")
-                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day") 
+                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
+                l=len(brand)
                 for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
                     print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])                 
             elif n==3:
@@ -144,6 +145,11 @@ class employee(menu): #derived from menu class
                 ir=int(input("Enter the number of the car who's rate you want to modify: "))
                 fr=int(input("Enter the new rate for the selected car: "))
                 price_per_day[ir]=fr
+                print("Displaying the updated inventory:")
+                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
+                l=len(brand)
+                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
+                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
                 
             
         else:

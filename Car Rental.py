@@ -1,43 +1,47 @@
 
 
 import csv
-from secrets import choice
-import time
-import getpass
-filename=open('Car data.csv','r')
+from operator import mod
+from secrets import choice #?
+import time # Delay of 1, yet to do
+import getpass #for password/login
+filename=open('Car data.csv','r') #File type for car dataset
 file=csv.DictReader(filename)
 type(file)
 
+#5 lists for each data
 brand=[],
 model=[],
 transmission=[],
 fuel=[],
 price_per_day=[]
-path= ('r','C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\Car data.csv')
+path= ('r','C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\Car data.csv')#path will have to be changed for device
+#Device specific path
 
-brand=list(brand)
+brand=list(brand) #converted tuple to list
 model=list(model)
 transmission=list(transmission)
 fuel=list(fuel)
 price_per_day=list(price_per_day)
 choice
 
-with open('Car data.csv', 'rb') as csvfile:
+with open('Car data.csv', 'rb') as csvfile: #To access CSV dataset
     for col in file:
-        brand.append(col["Brand"])
+        brand.append(col["Brand"]) 
         model.append(col["Model"])  
         transmission.append(col["Transmission"])
         fuel.append(col["Fuel"])
         price_per_day.append(col["Cost"])
-
+    
+    brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
 
 class menu:
     def __init__(self,user_type):
         self.user_type=user_type
-    def dis(self):
+    def dis(self): #display function
         global user_type
-        print("\tWELCOME to Online Car Renta Service!\n")
-        print("\tEnter which type of user are you?:\n  1. Agency Operator\t2. Customer")
+        print("\tWELCOME to Online Car Rental Service!\n")
+        print("\tEnter which type of user are you?:\n  1. Agency Operator/Employee\t2. Customer")
         n=int(input())
         if n==1:
             user_type="Operator"
@@ -45,22 +49,22 @@ class menu:
             user_type="Customer"
         else:
             print("Sorry, Wrong input!")
-            SystemExit
+            SystemExit #it will stop running.
         
         return user_type
 
-class customer(menu):
+class customer(menu): #derived from menu class
     def __init__(self,user_type):
-        super().__init__(user_type)
+        super().__init__(user_type) # to access user_type variable from parent menu class
         global choice
         print("\nDisplaying Car Inventory:\n")
-        print("Car Brand\tModel Name\tTransmission\tFuel\Rate per day or 300km")
-        l=len(model)
-        for i in range(1,l+1):
-            print(i,"\t",model[i],"\t",brand[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
+        print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
+        l=len(brand)
+        for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
+            print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
         choice=int(input("Enter your choice number"))
     
-class bill(menu):
+class bill(menu): #derived from menu class
     days=int(input("Enter the number of days you want to rent the car for:  (Valid range is between 1 to 60)\n"))
     if days>=1 and days<=5:
         rate=price_per_day[choice]
@@ -78,14 +82,15 @@ class bill(menu):
         print("Invalid Input")
         SystemExit
     print("Confirm Selection:")
-    print("You have chosen ",brand[choice],model[choice],", with ",transmission[choice]," transmission choice and ",fuel[choice]," fuel, at the rate of Rs. ",price_per_day[choice]," per day")
-    print("Thus Resulting in Total Bill of Rs. %0.2f" %rate)
+    print("You have chosen ",brand[choice],model[choice],", with ",transmission[choice]," transmission choice and ",fuel[choice]," fuel, at the rate of Rs. ",price_per_day[choice]," per day") #change the rate
+    print("Thus Resulting in Total Bill of Rs. %0.2f" %cost)
+    #Thank you screen
 
-class operator(menu):
+class employee(menu): #derived from menu class
     def __init__(self,user_type):
         super().__init__(user_type)
-        print("Agency Operator Page Display:")
-        pwd=getpass.getpass(prompt="Enter password to login: ")
+        print("Agency Operator/Employee Page Display:")
+        pwd=getpass.getpass(prompt="Enter password to login: ") #password and login
         if pwd=="BossGuy":
             print("Successful Login:")
             print(" 1. Add Vehicle\t2. Delete Vehicle\t3. Update Rates")

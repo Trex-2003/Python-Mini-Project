@@ -24,6 +24,7 @@ transmission=list(transmission)
 fuel=list(fuel)
 price_per_day=list(price_per_day)
 choice
+global user_type
 
 with open('Car data.csv', 'rb') as csvfile: #To access CSV dataset
     for col in file:
@@ -33,13 +34,14 @@ with open('Car data.csv', 'rb') as csvfile: #To access CSV dataset
         fuel.append(col["Fuel"])
         price_per_day.append(col["Cost"])
     
-    brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
+    #brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
 
 class menu:
-    def __init__(self,user_type):
-        self.user_type=user_type
-    def dis(self): #display function
-        global user_type
+    global choice
+    def __init__(self,choice):
+        self.choice=choice
+    def dis(self,user_type): #display function
+        #global user_type
         print("\tWELCOME to Online Car Rental Service!\n")
         print("\tEnter which type of user are you?:\n  1. Agency Operator/Employee\t2. Customer")
         n=int(input())
@@ -49,46 +51,53 @@ class menu:
             user_type="Customer"
         else:
             print("Sorry, Wrong input!")
-            SystemExit #it will stop running.
+            #SystemExit #it will stop running.
         
         return user_type
 
 class customer(menu): #derived from menu class
-    def __init__(self,user_type):
-        super().__init__(user_type) # to access user_type variable from parent menu class
-        global choice
+    global choice
+    def __init__(self,choice):
+        super().__init__(choice) # to access user_type variable from parent menu class
+    def disp1(self):
         print("\nDisplaying Car Inventory:\n")
         print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
-        l=len(brand)
+        l=len(model)
         for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
             print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
         choice=int(input("Enter your choice number"))
     
 class bill(menu): #derived from menu class
-    days=int(input("Enter the number of days you want to rent the car for:  (Valid range is between 1 to 60)\n"))
-    if days>=1 and days<=5:
-        rate=price_per_day[choice]
-        cost=rate*days
-    elif days>=6 and days<=10:
-        rate=0.85*price_per_day[choice]
-        cost=rate*days
-    elif days>=11 and days <=15:
-        rate=0.7*price_per_day[choice]
-        cost=rate*days
-    elif days>=16 and days<=60:
-        rate=0.5*price_per_day[choice]
-        cost=rate*days
-    else:
-        print("Invalid Input")
-        SystemExit
-    print("Confirm Selection:")
-    print("You have chosen ",brand[choice],model[choice],", with ",transmission[choice]," transmission choice and ",fuel[choice]," fuel, at the rate of Rs. ",price_per_day[choice]," per day") #change the rate
-    print("Thus Resulting in Total Bill of Rs. %0.2f" %cost)
-    #Thank you screen
+    #global user_type
+    def __init__(self,choice):
+        super().__init__(choice)
+    def options(self):
+        days=int(input("Enter the number of days you want to rent the car for:  (Valid range is between 1 to 60)\n"))
+        if days>=1 and days<=5:
+            rate=int(price_per_day[choice])
+            cost=rate*days
+        elif days>=6 and days<=10:
+            rate=0.85*int(price_per_day[choice])
+            cost=rate*days
+        elif days>=11 and days <=15:
+            rate=0.7*int(price_per_day[choice])
+            cost=rate*days
+        elif days>=16 and days<=60:
+            rate=0.5*int(price_per_day[choice])
+            cost=rate*days
+        else:
+            print("Invalid Input")
+            #SystemExit
+        print("Confirm Selection:")
+        print("You have chosen ",brand[choice],model[choice],", with ",transmission[choice]," transmission choice and ",fuel[choice]," fuel, at the rate of Rs. ",price_per_day[choice]," per day") #change the rate
+        print("Thus Resulting in Total Bill of Rs. %0.2f" %cost)
+        #Thank you screen
 
 class employee(menu): #derived from menu class
+    global user_type
     def __init__(self,user_type):
         super().__init__(user_type)
+    def disp2(self):    
         print("Agency Operator/Employee Page Display:")
         pwd=getpass.getpass(prompt="Enter password to login: ") #password and login
         if pwd=="BossGuy":
@@ -143,7 +152,7 @@ class employee(menu): #derived from menu class
                 for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
                     print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i]) 
                 ir=int(input("Enter the number of the car who's rate you want to modify: "))
-                fr=int(input("Enter the new rate for the selected car: "))
+                fr=input("Enter the new rate for the selected car: ")
                 price_per_day[ir]=fr
                 print("Displaying the updated inventory:")
                 print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
@@ -154,5 +163,21 @@ class employee(menu): #derived from menu class
             
         else:
             print("Wrong Credentials!")
-            SystemExit
-         
+            #SystemExit
+
+
+ob=menu(0)
+ob1=ob.dis("ask")
+ob2=customer(0)
+ob3=bill(0)
+ob4=employee(0)
+# user.customer()
+# user.bill()
+# user.options()
+#user1=user
+if ob1=="Customer":
+    ob2.disp1()
+    ob3.options()
+elif ob1=="Operator":
+    ob4.disp2()
+

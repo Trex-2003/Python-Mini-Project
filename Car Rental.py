@@ -118,6 +118,7 @@ class employee(menu): #derived from menu class
                 #Ask user which car number he wants to delete
                 #Remove that Vehicle (remove brand, model, transmisison, fuel, price_per_day)
                 #Display the new inventory just like line 114
+                l=len(brand)
                 for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
                     print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])                 
                 n=int(input("Enter the number of the car you wish to remove: "))
@@ -135,6 +136,7 @@ class employee(menu): #derived from menu class
                 #Ask user what is new rate
                 #price_per_day[index]=new rate just taken input from user
                 #Display the entire inventory
+                l=len(brand)
                 for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
                     print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i]) 
                 ir=int(input("Enter the number of the car who's rate you want to modify: "))

@@ -94,11 +94,19 @@ class employee(menu): #derived from menu class
         if pwd=="BossGuy":
             print("Successful Login:")
             print(" 1. Add Vehicle\t2. Delete Vehicle\t3. Update Rates")
+            n=int(input())
+            if n==1:
+                brand.append(col["Brand"]) 
+                model.append(col["Model"])  
+                transmission.append(col["Transmission"])
+                fuel.append(col["Fuel"])
+                price_per_day.append(col["Cost"])
+            elif n==2:
+                pass
+            elif n=3:
+                pass
+            
         else:
             print("Wrong Credentials!")
             SystemExit
-         brand.append(col["Brand"]) 
-         model.append(col["Model"])  
-         transmission.append(col["Transmission"])
-         fuel.append(col["Fuel"])
-         price_per_day.append(col["Cost"])
+         

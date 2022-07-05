@@ -118,6 +118,14 @@ class employee(menu): #derived from menu class
                 #Ask user which car number he wants to delete
                 #Remove that Vehicle (remove brand, model, transmisison, fuel, price_per_day)
                 #Display the new inventory just like line 114
+                n=int(input("Enter the number of the car you wish to remove: "))
+                del brand[n]
+                del model[n]
+                del transmission[n]
+                del fuel[n]
+                del price_per_day[n]
+                print("Displaying the updated inventory:")
+                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")                               
             elif n=3:
                 #Show entire inventory just like Line 114
                 #Ask user (accept number) which number car he wants to modify

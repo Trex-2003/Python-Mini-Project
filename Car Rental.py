@@ -139,6 +139,7 @@ class employee(menu): #derived from menu class
                     print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i]) 
                 ir=int(input("Enter the number of the car who's rate you want to modify: "))
                 fr=int(input("Enter the new rate for the selected car: "))
+                price_per_day[ir]=fr
                 
             
         else:

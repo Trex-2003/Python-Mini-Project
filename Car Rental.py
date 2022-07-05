@@ -128,7 +128,9 @@ class employee(menu): #derived from menu class
                 del fuel[n]
                 del price_per_day[n]
                 print("Displaying the updated inventory:")
-                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")                               
+                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day") 
+                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
+                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])                 
             elif n==3:
                 #Show entire inventory just like Line 114
                 #Ask user (accept number) which number car he wants to modify

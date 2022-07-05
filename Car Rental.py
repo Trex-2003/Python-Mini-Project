@@ -97,4 +97,9 @@ class employee(menu): #derived from menu class
         else:
             print("Wrong Credentials!")
             SystemExit
-
+            
+brand.append(col["Brand"]) 
+model.append(col["Model"])  
+transmission.append(col["Transmission"])
+fuel.append(col["Fuel"])
+price_per_day.append(col["Cost"])

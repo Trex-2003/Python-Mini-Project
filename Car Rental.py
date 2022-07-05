@@ -128,13 +128,18 @@ class employee(menu): #derived from menu class
                 del price_per_day[n]
                 print("Displaying the updated inventory:")
                 print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")                               
-            elif n=3:
+            elif n==3:
                 #Show entire inventory just like Line 114
                 #Ask user (accept number) which number car he wants to modify
                 #Display that specific car details like: Brand,, Model, Current Rate
                 #Ask user what is new rate
                 #price_per_day[index]=new rate just taken input from user
                 #Display the entire inventory
+                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
+                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i]) 
+                ir=int(input("Enter the number of the car who's rate you want to modify: "))
+                fr=int(input("Enter the new rate for the selected car: "))
+                
             
         else:
             print("Wrong Credentials!")

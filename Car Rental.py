@@ -109,9 +109,9 @@ class employee(menu): #derived from menu class
                 brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
                 print("Displaying the updated inventory:")
                 print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
-        l=len(brand)
-        for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-            print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
+                l=len(brand)
+                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
+                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
                 
             elif n==2:
                 pass

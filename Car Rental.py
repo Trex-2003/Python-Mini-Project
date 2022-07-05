@@ -101,11 +101,18 @@ class employee(menu): #derived from menu class
                 transmission1=input("Enter the kind of transmission")
                 fuel1=input("Enter the type of fuel")
                 price_per_day1=input("Enter the price per day")
-                print(brand.append(brand1))
-                print(model.append(model1)) 
-                transmission.append(col["Transmission"])
-                fuel.append(col["Fuel"])
-                price_per_day.append(col["Price"])
+                brand.append(brand1)
+                model.append(model1) 
+                transmission.append(transmission1)
+                fuel.append(fuel1)
+                price_per_day.append(price_per_day1)
+                brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
+                print("Displaying the updated inventory:")
+                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
+        l=len(brand)
+        for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
+            print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
+                
             elif n==2:
                 pass
             elif n=3:

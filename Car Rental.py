@@ -114,7 +114,10 @@ class employee(menu): #derived from menu class
                     print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
                 
             elif n==2:
-                pass
+                #Show entire inventory just like Line 114
+                #Ask user which car number he wants to delete
+                #Remove that Vehicle (remove brand, model, transmisison, fuel, price_per_day)
+                #Display the new inventory just like line 114
             elif n=3:
                 pass
             

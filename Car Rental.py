@@ -1,183 +1,139 @@
-
-
+import getpass
 import csv
-from operator import mod
-from secrets import choice #?
-import time # Delay of 1, yet to do
-import getpass #for password/login
-filename=open('Car data.csv','r') #File type for car dataset
-file=csv.DictReader(filename)
-type(file)
 
-#5 lists for each data
-brand=[],
-model=[],
-transmission=[],
-fuel=[],
-price_per_day=[]
-path= ('r','C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\Car data.csv')#path will have to be changed for device
-#Device specific path
-
-brand=list(brand) #converted tuple to list
-model=list(model)
-transmission=list(transmission)
-fuel=list(fuel)
-price_per_day=list(price_per_day)
-choice
-global user_type
-
-with open('Car data.csv', 'rb') as csvfile: #To access CSV dataset
-    for col in file:
-        brand.append(col["Brand"]) 
-        model.append(col["Model"])  
-        transmission.append(col["Transmission"])
-        fuel.append(col["Fuel"])
-        price_per_day.append(col["Cost"])
-    
-    #brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
-
-class menu:
-    global choice
-    def __init__(self,choice):
-        self.choice=choice
-    def dis(self,user_type): #display function
-        #global user_type
-        print("\tWELCOME to Online Car Rental Service!\n")
-        print("\tEnter which type of user are you?:\n  1. Agency Operator/Employee\t2. Customer")
-        n=int(input())
-        if n==1:
-            user_type="Operator"
-        elif n==2:
-            user_type="Customer"
-        else:
-            print("Sorry, Wrong input!")
-            #SystemExit #it will stop running.
+from pip import main
+def main_menu():
+    index='1'
+    while index=='1':
+        print("**CAR RENTAL SERVICE**")
+        print("\nSelect an option:")
+        print("1 = Employee Login")
+        print("2 = Customer Login")
+        print("0 = Exit")
+        user_input=input("Enter the option number: ")
+        if user_input=='1':
+            password=getpass.getpass(prompt="Enter the password: ")
+            if password=="TrustMe":
+                employee_menu()
+            else:
+                print("Wrong Password")
+                opt=input("Press any key to go back to main menu\n")
+                #index-=1
+                main_menu() #check once
         
-        return user_type
+        elif user_input=='2':
+            pass
+            #customer_menu()
+        
+        elif user_input=='0':
+            index=0
+        
+        else:
+            print("\nInvalid Input...\n")
 
-class customer(menu): #derived from menu class
-    global choice
-    def __init__(self,choice):
-        super().__init__(choice) # to access user_type variable from parent menu class
-    def disp1(self):
-        print("\nDisplaying Car Inventory:\n")
-        print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
-        l=len(model)
-        for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-            print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
-        choice=int(input("Enter your choice number"))
+
+def employee_menu():
+    print("**Employee Menu**")
+    print("\nSelect an option:")
+    print("1 = Add Car")
+    print("2 = Modify Car")
+    print("3 = Delete Car")
+    print("4 = Return to Main Menu")
+
+    emp_input=input("Enter an option: ")
+    while (emp_input!='1' and emp_input!='2' and emp_input!='3' and emp_input!='4'):
+        print("Invalid Input, select again...")
+        employee_menu()
     
-class bill(menu): #derived from menu class
-    #global user_type
-    def __init__(self,choice):
-        super().__init__(choice)
-    def options(self):
-        days=int(input("Enter the number of days you want to rent the car for:  (Valid range is between 1 to 60)\n"))
-        if days>=1 and days<=5:
-            rate=int(price_per_day[choice])
-            cost=rate*days
-        elif days>=6 and days<=10:
-            rate=0.85*int(price_per_day[choice])
-            cost=rate*days
-        elif days>=11 and days <=15:
-            rate=0.7*int(price_per_day[choice])
-            cost=rate*days
-        elif days>=16 and days<=60:
-            rate=0.5*int(price_per_day[choice])
-            cost=rate*days
+    if emp_input=='1':
+        add_car()
+    
+    elif emp_input=='2':
+        modify_car()
+
+    elif emp_input=='3':
+        pass#del_car()
+
+    elif emp_input=='4':
+        main_menu()
+    
+
+def add_car():
+    #r=csv.reader(open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt"))
+
+    car_numberPlate_exists=False
+
+    index=0
+    print("\nAdd Car Entry\n")
+    car_brand=input("Car Brand: ")
+    car_model=input("Car Model: ")
+    car_fuel=input("Car Fuel: ")
+    car_transmission=input("Transmission: ")
+    car_numberPlate=input("No. Plate: ")
+    car_price_per_day=input("Rate per day: ")
+
+    carslist=load_carlist()
+
+    if car_numberPlate!="":
+        car_numberPlate=car_numberPlate.upper()
+        check_carPlates=check_carPlates_fn(carslist,car_numberPlate)
+        car_numberPlate_exists=check_carPlates[0]
+        last_seqno=check_carPlates[1]
+
+        if car_numberPlate_exists:
+            print("Not Valid as number is already taken.")
+            employee_menu()
+    
+    if  not car_numberPlate_exists:
+        print()
+        if len(car_numberPlate)!=10:
+            print("Number should be 8 characters long!")
+            index+=1
+        if not car_price_per_day.isnumeric():
+            print("Price must be in numbers!")
+            index+=1
+        
+        if index!=0:
+            print("The detail(s) are invalid, please try again!")
+            employee_menu()
         else:
-            print("Invalid Input")
-            #SystemExit
-        print("Confirm Selection:")
-        print("You have chosen ",brand[choice],model[choice],", with ",transmission[choice]," transmission choice and ",fuel[choice]," fuel, at the rate of Rs. ",price_per_day[choice]," per day") #change the rate
-        print("Thus Resulting in Total Bill of Rs. %0.2f" %cost)
-        #Thank you screen
+            print("\n\nDetails of the Car.\n")
+            print("Brand: {0}".format(car_brand.upper()))
+            print("Model: {0}".format(car_model.upper()))
+            print("Fuel: {0}".format(car_fuel.upper()))
+            print("Transmission: {0}".format(car_transmission.upper()))
+            print("Price Per Day: Rs. {0}".format(car_price_per_day))
+            print("Number Plate: {0}".format(car_numberPlate.upper()))
 
-class employee(menu): #derived from menu class
-    global user_type
-    def __init__(self,user_type):
-        super().__init__(user_type)
-    def disp2(self):    
-        print("Agency Operator/Employee Page Display:")
-        pwd=getpass.getpass(prompt="Enter password to login: ") #password and login
-        if pwd=="BossGuy":
-            print("Successful Login:")
-            print(" 1. Add Vehicle\t2. Delete Vehicle\t3. Update Rates")
-            n=int(input())
-            if n==1:
-                brand1=input("Enter the brand")
-                model1=input("Enter the model")
-                transmission1=input("Enter the kind of transmission")
-                fuel1=input("Enter the type of fuel")
-                price_per_day1=input("Enter the price per day")
-                brand.append(brand1)
-                model.append(model1) 
-                transmission.append(transmission1)
-                fuel.append(fuel1)
-                price_per_day.append(price_per_day1)
-                brand,model,transmission,fuel,price_per_day=(list(t) for t in zip(*sorted(zip(brand,model,transmission,fuel,price_per_day))))
-                print("Displaying the updated inventory:")
-                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
-                l=len(brand)
-                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
+            save_YN=input("Confirm if you want to save this record with 'Y' or discard with 'N':  ")
+            if save_YN.upper()=='Y':
+                last_seqno=int(last_seqno)+1
+                carslist=open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt","a")
+                carslist.write("\n"+str(last_seqno)+","+ car_brand.upper() + ","+car_model.upper()+","+ car_fuel.upper()+ ","+ car_transmission.upper() +car_numberPlate.upper()+","+ car_price_per_day)
                 
-            elif n==2:
-                #Show entire inventory just like Line 114
-                #Ask user which car number he wants to delete
-                #Remove that Vehicle (remove brand, model, transmisison, fuel, price_per_day)
-                #Display the new inventory just like line 114
-                l=len(brand)
-                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])                 
-                n=int(input("Enter the number of the car you wish to remove: "))
-                del brand[n]
-                del model[n]
-                del transmission[n]
-                del fuel[n]
-                del price_per_day[n]
-                print("Displaying the updated inventory:")
-                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
-                l=len(brand)
-                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])                 
-            elif n==3:
-                #Show entire inventory just like Line 114
-                #Ask user (accept number) which number car he wants to modify
-                #Display that specific car details like: Brand,, Model, Current Rate
-                #Ask user what is new rate
-                #price_per_day[index]=new rate just taken input from user
-                #Display the entire inventory
-                l=len(brand)
-                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i]) 
-                ir=int(input("Enter the number of the car who's rate you want to modify: "))
-                fr=input("Enter the new rate for the selected car: ")
-                price_per_day[ir]=fr
-                print("Displaying the updated inventory:")
-                print("Car Brand\tModel Name\tTransmission\tFuel\tRate per day")
-                l=len(brand)
-                for i in range(1,l+1): # for loop starts from 1 till l+1 to exlude the titles of columns
-                    print(i,"\t",brand[i],"\t",model[i],"\t",transmission[i],"\t",fuel[i],"\t",price_per_day[i])  
-                
-            
-        else:
-            print("Wrong Credentials!")
-            #SystemExit
+                carslist.close()
+                print("Car Added Successfully\n")
+            else:
+                print("Record Not Saved as User cancelled the command")
+    employee_menu()
 
+def modify_car():
+    pass
 
-ob=menu(0)
-ob1=ob.dis("ask")
-ob2=customer(0)
-ob3=bill(0)
-ob4=employee(0)
-# user.customer()
-# user.bill()
-# user.options()
-#user1=user
-if ob1=="Customer":
-    ob2.disp1()
-    ob3.options()
-elif ob1=="Operator":
-    ob4.disp2()
+def load_carlist():
+    r=csv.reader(open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt"))
+    lines=list(r)
+    return lines
 
+def check_carPlates_fn(mycarlist,mycarplate):
+    plate_existYN=False
+
+    for i in range(len(mycarlist)):
+        car_id=mycarlist[i][0]
+        
+        if mycarlist[1][6]==plate_existYN:
+            plate_existYN=True
+    
+    return plate_existYN,car_id
+
+main_menu()

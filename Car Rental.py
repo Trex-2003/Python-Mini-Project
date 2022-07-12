@@ -1,5 +1,7 @@
+from calendar import c
 import getpass
 import csv
+import time
 
 
 from pip import main
@@ -23,11 +25,11 @@ def main_menu():
                 main_menu() #check once
         
         elif user_input=='2':
-            pass
-            #customer_menu()
+            customer_menu()
         
         elif user_input=='0':
             index=0
+            SystemExit
         
         else:
             print("\nInvalid Input...\n")
@@ -201,7 +203,7 @@ def modify_car():
         for i in range(len(carslist)):
             carslist_str=str(carslist[i])
             carslist_str=carslist_str.replace('[','')
-            carslist_str=carslist_str.replace(']    ','')
+            carslist_str=carslist_str.replace(']','')
             carslist_str=carslist_str.replace("'",'')
             carslist_str=carslist_str.replace(' ','')
 
@@ -237,4 +239,85 @@ def check_carPlates_fn(mycarlist,mycarplate):
     
     return plate_existYN,car_id
 
+
+def customer_menu():
+    save_YN="N"
+    days=1
+    print("**Customer Menu**")
+    print("\nSelect a vehicle:")
+    print("Displaying Car Inventory\n")
+    carslist=load_carlist()
+    time.sleep(1)
+    print("Car ID Brand\tModel\tFuel\tTransmission\tPrice Per Day (Rs)  Number Plate:")
+    i=0
+    for i in range(len(carslist)):
+        car_id=carslist[i][0]
+        brand=carslist[i][1]
+        model=carslist[i][2]
+        fuel=carslist[i][4]
+        trm=carslist[i][3]
+        price=carslist[i][5]
+        plate=carslist[i][6]
+        
+        if i!=0:    #Since we do not want to print the 1st row:
+            print(car_id,"\t",brand,"\t",model,"\t",trm,"\t",fuel,"\t",price,"\t",plate,"\n")
+        # print("Car ID: {0}".format(car_id))
+        # print("Brand: {0}".format(brand.upper()))
+        # print("Model: {0}".format(model.upper()))
+        # print("Transmission: {0}".format(trm.upper()))
+        # print("Fuel: {0}".format(fuel.upper()))
+        # print("Price Per Day: Rs. {0}".format(price))
+        # print("Number Plate: {0}".format(plate.upper()))
+    
+    car_id=int(input("Enter the Car ID number which you wish to Rent/Hire: "))
+
+    print("Car Selected: {0} - {1}".format(carslist[car_id][1],carslist[car_id][2]))
+    user_IN=input("Enter 'Y' if interested in renting this car: ")
+    while(user_IN.upper()!='Y'):
+        print("Taking back to main menu...")
+        main_menu()
+    if user_IN.upper()=='Y':
+        days=int(input("\nEnter Number of days for which you want to rent car: "))
+        while(days<1 or days>45):
+            print("\nInvalid Range, taking you back to Customer Menu...\n")
+            time.sleep(0.75)
+            customer_menu()
+        bill(days,car_id)
+    SystemExit
+            
+def bill(days,car_id):
+    final_bill=0
+    slab=0
+    carslist=load_carlist()
+    for i in range(len(carslist)):
+        car_id=carslist[i][0]
+        brand=carslist[i][1]
+        model=carslist[i][2]
+        fuel=carslist[i][4]
+        trm=carslist[i][3]
+        price=carslist[i][5]
+        plate=carslist[i][6]
+    
+    if days<=10:
+        final_bill=days*(float(carslist[car_id][5]))
+        slab=0
+    elif days>10 and days<=20:
+        final_bill=days*(0.85*float(carslist[car_id][5]))
+        slab=15
+    elif days>20 and days<=45:
+        final_bill=days*(0.75*float(carslist[car_id][5]))
+        slab=25
+    
+    cust_Name=input("Enter your Name:  ")
+    
+    print("\n\n**BILL**\n")
+    print("Customer Name: ",cust_Name)
+    print("Car Brand and Model: {0} - {1}".format((carslist[car_id][1]).upper(),(carslist[car_id][2]).upper()))
+    print("Transmission: {0}".format(carslist[car_id][3].upper()))
+    print("Fuel Type: {0}".format(carslist[car_id][4].upper()))
+    print("Number of days: {0}".format(days))
+    print("Amount to be paid after %0.2f" ,slab ," percent discount: Rs. %0.2f" %final_bill)
+    print("Time: ",time.gmtime)
+    
+    print("\n**THANK YOU**")
 main_menu()

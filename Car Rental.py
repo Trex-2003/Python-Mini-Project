@@ -33,6 +33,7 @@ def main_menu():
         
         else:
             print("\nInvalid Input...\n")
+            main_menu()
 
 
 def employee_menu():
@@ -55,7 +56,7 @@ def employee_menu():
         modify_car()
 
     elif emp_input=='3':
-        pass#del_car()
+        del_car()
 
     elif emp_input=='4':
         main_menu()
@@ -90,7 +91,7 @@ def add_car():
     if  not car_numberPlate_exists:
         print()
         if len(car_numberPlate)!=10:
-            print("Number should be 8 characters long!")
+            print("Number should be 10 characters long!")
             index+=1
         if not car_price_per_day.isnumeric():
             print("Price must be in numbers!")
@@ -119,6 +120,70 @@ def add_car():
             else:
                 print("Record Not Saved as User cancelled the command")
     employee_menu()
+def del_car():
+    
+    carslist=load_carlist()
+    #del_index
+    for i in range(len(carslist)):
+        #seq=i
+        car_id=carslist[i][0]
+        brand=carslist[i][1]
+        model=carslist[i][2]
+        fuel=carslist[i][4]
+        trm=carslist[i][3]
+        price=carslist[i][5]
+        plate=carslist[i][6]
+
+        if i!=0:    #Since we do not want to print the 1st row:
+            print(car_id,"\t",brand,"\t",model,"\t",trm,"\t",fuel,"\t",price,"\t",plate,"\n")
+    
+    del_index=int(input("\nEnter the Car ID which you want to delete: "))
+    while(del_index<0 or del_index>len(carslist)):
+        print("Invalid input, loading employee menu...\n")
+        employee_menu()
+        break
+    
+    print("Car Selected: {0} - {1}".format(carslist[del_index][1],carslist[del_index][2]))
+    user_IN=input("Enter 'Y' if you want to delete this car entry from record: ")
+    while(user_IN.upper()!='Y'):
+        print("Taking back to Employee menu...")
+        employee_menu()
+    if user_IN.upper()=='Y':
+        f=open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt","w")
+        for i in range(len(carslist)):
+            seq=i
+            carslist_str=str(carslist[i])
+            carslist_str=carslist_str.replace('[','')
+            carslist_str=carslist_str.replace(']','')
+            carslist_str=carslist_str.replace("'",'')
+            carslist_str=carslist_str.replace(' ','')
+        f.close()
+        del carslist[del_index]
+        print("Entry successfully Deleted...")
+        time.sleep(0.5)
+        print("Updated Inventory:\n")
+        print("Car ID Brand\tModel\tFuel\tTransmission\tPrice Per Day (Rs)  Number Plate:")
+        i=0
+        for i in range(len(carslist)):
+            if  i<del_index:
+                car_id=carslist[i][0]
+                brand=carslist[i][1]
+                model=carslist[i][2]
+                fuel=carslist[i][4]
+                trm=carslist[i][3]
+                price=carslist[i][5]
+                plate=carslist[i][6]
+            elif i==del_index:
+                continue
+            elif i>del_index:
+                carslist[i][0]=carslist[i][0]-1
+                
+            if i!=0:    #Since we do not want to print the 1st row:
+                print(car_id,"\t",brand,"\t",model,"\t",trm,"\t",fuel,"\t",price,"\t",plate,"\n")
+            
+            
+
+
 
 def modify_car():
     brand2=" "
@@ -169,7 +234,7 @@ def modify_car():
             print("Number Plate: {0}".format(plate.upper()))
             plate2=input("Enter number plate: ")
 
-            if brand2!="":
+            if brand2!="": #this means if <user entered enter key>
                 brand=brand2.upper()
             if model2!="":
                 model=model2.upper()
@@ -219,13 +284,14 @@ def modify_car():
         print("Record saved Successfully.")
     else:
         print("Record Not Saved as User cancelled the command")
+        employee_menu()
 
     pressreturn=input("Press Enter to return to previous menu...")
     employee_menu()
 
 def load_carlist():
     r=csv.reader(open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt"))
-    lines=list(r)
+    lines=list(r) #list of lists
     return lines
 
 def check_carPlates_fn(mycarlist,mycarplate):
@@ -269,9 +335,9 @@ def customer_menu():
         # print("Price Per Day: Rs. {0}".format(price))
         # print("Number Plate: {0}".format(plate.upper()))
     
-    car_id=int(input("Enter the Car ID number which you wish to Rent/Hire: "))
+    car_choice=int(input("Enter the Car ID number which you wish to Rent/Hire: "))
 
-    print("Car Selected: {0} - {1}".format(carslist[car_id][1],carslist[car_id][2]))
+    print("Car Selected: {0} - {1}".format(carslist[car_choice][1],carslist[car_choice][2]))
     user_IN=input("Enter 'Y' if interested in renting this car: ")
     while(user_IN.upper()!='Y'):
         print("Taking back to main menu...")
@@ -282,10 +348,10 @@ def customer_menu():
             print("\nInvalid Range, taking you back to Customer Menu...\n")
             time.sleep(0.75)
             customer_menu()
-        bill(days,car_id)
+        bill(days,car_choice)
     SystemExit
             
-def bill(days,car_id):
+def bill(days,car_choice_in):
     final_bill=0
     slab=0
     carslist=load_carlist()
@@ -297,27 +363,40 @@ def bill(days,car_id):
         trm=carslist[i][3]
         price=carslist[i][5]
         plate=carslist[i][6]
-    
+    # print(carslist)
+    # print(car_choice_in)
+    # print(carslist[car_choice_in])
+
     if days<=10:
-        final_bill=days*(float(carslist[car_id][5]))
+        a=int(carslist[car_choice_in][5])
+        final_bill=days*(a)
         slab=0
     elif days>10 and days<=20:
-        final_bill=days*(0.85*float(carslist[car_id][5]))
+        a=int(carslist[car_choice_in][5])
+        final_bill=days*0.85*a
         slab=15
     elif days>20 and days<=45:
-        final_bill=days*(0.75*float(carslist[car_id][5]))
+        a=int(carslist[car_choice_in][5])
+        final_bill=days*0.75*a
         slab=25
     
     cust_Name=input("Enter your Name:  ")
     
+    brandOut=carslist[car_choice_in][1].upper()
+    modelOut=carslist[car_choice_in][2].upper()
+    trmOut=carslist[car_choice_in][3].upper()
+    fuelOut=carslist[car_choice_in][4].upper()
+    #format((carslist[car_choice_in][1]).upper(),(carslist[car_choice_in][2]).upper())
+    #carslist[car_choice_in][3].upper())
+
     print("\n\n**BILL**\n")
     print("Customer Name: ",cust_Name)
-    print("Car Brand and Model: {0} - {1}".format((carslist[car_id][1]).upper(),(carslist[car_id][2]).upper()))
-    print("Transmission: {0}".format(carslist[car_id][3].upper()))
-    print("Fuel Type: {0}".format(carslist[car_id][4].upper()))
+    print("Car Brand and Model: {0} - {1}".format(brandOut,modelOut))
+    print("Transmission: {0}".format(trmOut))
+    print("Fuel Type: {0}".format(fuelOut))
     print("Number of days: {0}".format(days))
-    print("Amount to be paid after %0.2f" ,slab ," percent discount: Rs. %0.2f" %final_bill)
-    print("Time: ",time.gmtime)
+    print("Amount to be paid after %.2f" %slab ," percent discount: Rs. %.2f" %final_bill)
+    #print("Time: ",time.gmtime)
     
     print("\n**THANK YOU**")
 main_menu()

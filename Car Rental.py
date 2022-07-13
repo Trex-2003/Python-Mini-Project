@@ -1,10 +1,7 @@
-from calendar import c
 import getpass
 import csv
 import time
 
-
-from pip import main
 def main_menu():
     index='1'
     while index=='1':
@@ -149,39 +146,39 @@ def del_car():
         print("Taking back to Employee menu...")
         employee_menu()
     if user_IN.upper()=='Y':
-        f=open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt","w")
-        for i in range(len(carslist)):
-            seq=i
-            carslist_str=str(carslist[i])
-            carslist_str=carslist_str.replace('[','')
-            carslist_str=carslist_str.replace(']','')
-            carslist_str=carslist_str.replace("'",'')
-            carslist_str=carslist_str.replace(' ','')
-        f.close()
-        del carslist[del_index]
+        f=open("C:\\Users\\Aaditya\\Desktop\\Kjsce\\Python Programming\\Car Rental Project Folder\\cars_list.txt","a+")
+        # for i in range(len(carslist)):
+        #     seq=i
+        #     carslist_str=str(carslist[i])
+        #     carslist_str=carslist_str.replace('[','')
+        #     carslist_str=carslist_str.replace(']','')
+        #     carslist_str=carslist_str.replace("'",'')
+        #     carslist_str=carslist_str.replace(' ','')
+        # del carslist[del_index]
+        carslist.pop(del_index)
         print("Entry successfully Deleted...")
         time.sleep(0.5)
         print("Updated Inventory:\n")
         print("Car ID Brand\tModel\tFuel\tTransmission\tPrice Per Day (Rs)  Number Plate:")
-        i=0
         for i in range(len(carslist)):
-            if  i<del_index:
-                car_id=carslist[i][0]
-                brand=carslist[i][1]
-                model=carslist[i][2]
-                fuel=carslist[i][4]
-                trm=carslist[i][3]
-                price=carslist[i][5]
-                plate=carslist[i][6]
-            elif i==del_index:
-                continue
-            elif i>del_index:
-                carslist[i][0]=carslist[i][0]-1
+            #if  i<del_index:
+            car_id=carslist[i][0]
+            brand=carslist[i][1]
+            model=carslist[i][2]
+            fuel=carslist[i][4]
+            trm=carslist[i][3]
+            price=carslist[i][5]
+            plate=carslist[i][6]
+            # elif i==del_index:
+            #     continue
+            # elif i>del_index:
+            #     carslist[i][0]=int(carslist[i][0])-1
                 
             if i!=0:    #Since we do not want to print the 1st row:
                 print(car_id,"\t",brand,"\t",model,"\t",trm,"\t",fuel,"\t",price,"\t",plate,"\n")
             
-            
+            f.close()
+
 
 
 
@@ -396,6 +393,9 @@ def bill(days,car_choice_in):
     print("Fuel Type: {0}".format(fuelOut))
     print("Number of days: {0}".format(days))
     print("Amount to be paid after %.2f" %slab ," percent discount: Rs. %.2f" %final_bill)
+    time.sleep(0.5)
+    print("Taking back to main menu...")
+    time.sleep(2)
     #print("Time: ",time.gmtime)
     
     print("\n**THANK YOU**")
